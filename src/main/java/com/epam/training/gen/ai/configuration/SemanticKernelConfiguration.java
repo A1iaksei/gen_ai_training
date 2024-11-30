@@ -9,12 +9,7 @@ import com.microsoft.semantickernel.orchestration.PromptExecutionSettings;
 import com.microsoft.semantickernel.plugin.KernelPlugin;
 import com.microsoft.semantickernel.plugin.KernelPluginFactory;
 import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
-import java.util.Map;
-
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +22,10 @@ public class SemanticKernelConfiguration {
   private final OpenAIAsyncClient openAIAsyncClient;
 
   public static final String PLUGIN_NAME = "Simple plugin";
-  public static final double TEMPERATURE = 1.0;
+
+  public PromptProperties getPromptProperties() {
+    return clientOpenAiProperties.promptProperties();
+  }
 
   /**
    * Creates a {@link ChatCompletionService} bean for handling chat completions using Azure OpenAI.
@@ -75,19 +73,12 @@ public class SemanticKernelConfiguration {
   @Bean
   public InvocationContext invocationContext() {
     return InvocationContext.builder()
-        .withPromptExecutionSettings(PromptExecutionSettings.builder().withTemperature(1.0).build())
+        .withPromptExecutionSettings(
+            PromptExecutionSettings.builder()
+                .withTemperature(getPromptProperties().temperature())
+                .withFrequencyPenalty(getPromptProperties().frequencyPenalty())
+                .withMaxTokens(getPromptProperties().maxTokens())
+                .build())
         .build();
-  }
-
-  /**
-   * Creates a map of {@link PromptExecutionSettings} for different models.
-   *
-   * @return a map of model names to {@link PromptExecutionSettings}
-   */
-  @Bean
-  public Map<String, PromptExecutionSettings> promptExecutionSettingsMap() {
-    return Map.of(
-        clientOpenAiProperties.clientOpenAiDeploymentName(),
-        PromptExecutionSettings.builder().withTemperature(TEMPERATURE).build());
   }
 }
