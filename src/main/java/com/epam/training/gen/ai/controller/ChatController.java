@@ -31,7 +31,7 @@ public class ChatController {
   public AppMessageDTO getSemanticKernelAnswer(@RequestBody AppMessageDTO message) {
     validateAppMessageDTO(message);
     String answer = kernelHistoryService.processWithHistory(message.getInput());
-    message.setOutput(List.of(answer));
+    message.setOutput(answer);
     return message;
   }
 
@@ -46,8 +46,8 @@ public class ChatController {
   @PostMapping(value = "/simple")
   public AppMessageDTO getSimpleAnswer(@RequestBody AppMessageDTO message) {
     validateAppMessageDTO(message);
-    var chatCompletions = simplePromptService.getChatCompletions(message.getInput());
-    message.setOutput(chatCompletions);
+    var answer = simplePromptService.getChatCompletions(message.getInput());
+    message.setOutput(answer);
     return message;
   }
 

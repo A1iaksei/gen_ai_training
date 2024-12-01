@@ -1,32 +1,30 @@
 package com.epam.training.gen.ai.service;
 
-import com.epam.training.gen.ai.exception.GenAiBadRequestException;
 import com.microsoft.semantickernel.Kernel;
+import com.microsoft.semantickernel.orchestration.InvocationContext;
 import com.microsoft.semantickernel.semanticfunctions.KernelFunction;
 import com.microsoft.semantickernel.semanticfunctions.KernelFunctionArguments;
 import com.microsoft.semantickernel.services.chatcompletion.ChatHistory;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
  * Service class for interacting with the AI kernel, maintaining chat history.
- * <p>
- * This service provides a method to process user prompts while preserving chat history.
- * It uses the {@link Kernel} to invoke AI responses based on the user's input and the
- * previous chat context. The conversation history is updated after each interaction.
+ *
+ * <p>This service provides a method to process user prompts while preserving chat history. It uses
+ * the {@link Kernel} to invoke AI responses based on the user's input and the previous chat
+ * context. The conversation history is updated after each interaction.
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KernelHistoryService {
   private final Kernel kernel;
-  private final ChatHistory chatHistory = new ChatHistory();
+  private final ChatHistory chatHistory;
+  private final InvocationContext invocationContext;
 
-    public KernelHistoryService(Kernel kernel) {
-        this.kernel = kernel;
-    }
-
-
-    /**
+  /**
    * Creates the kernel function arguments with the user prompt and chat history.
    *
    * @param prompt the user's input
@@ -68,14 +66,15 @@ public class KernelHistoryService {
     var response =
         kernel
             .invokeAsync(getChat())
+            .withInvocationContext(invocationContext)
             .withArguments(getKernelFunctionArguments(prompt, chatHistory))
             .block();
 
     chatHistory.addUserMessage(prompt);
     chatHistory.addAssistantMessage(response.getResult());
     var result = response.getResult();
-    log.info("AI answer:{}", response.getResult());
+    log.info("AI answer:{}", result);
 
-    return response.getResult();
+    return result;
   }
 }

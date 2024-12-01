@@ -3,12 +3,13 @@ package com.epam.training.gen.ai.configuration;
 import com.azure.ai.openai.OpenAIAsyncClient;
 import com.azure.ai.openai.OpenAIClientBuilder;
 import com.azure.core.credential.AzureKeyCredential;
-import com.epam.training.gen.ai.service.SimplePromptService;
+import com.microsoft.semantickernel.services.chatcompletion.ChatHistory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,12 +31,13 @@ public class OpenAIConfiguration {
   }
 
   /**
-   * Creates an {@link SimplePromptService} bean for interacting with REST API and end user.
+   * Creates an {@link ChatHistory} bean for collecting conversation history
    *
-   * @return an instance of {@link SimplePromptService}
+   * @return an instance of {@link ChatHistory}
    */
   @Bean
-  public SimplePromptService simplePromptService() {
-      return new SimplePromptService(openAIAsyncClient(), clientOpenAiProperties.clientOpenAiDeploymentName());
+  @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+  public ChatHistory chatHistory() {
+    return new ChatHistory();
   }
 }

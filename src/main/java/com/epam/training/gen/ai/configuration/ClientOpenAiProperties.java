@@ -4,4 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties()
 public record ClientOpenAiProperties(
-    String clientOpenAiKey, String clientOpenAiEndpoint, String clientOpenAiDeploymentName) {}
+    String clientOpenAiKey,
+    String clientOpenAiEndpoint,
+    String clientOpenAiDeploymentName,
+    PromptProperties promptProperties) {}

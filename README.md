@@ -1,3 +1,4 @@
+## Task 1
 ### Project Setup
 1. Clone the repository.
 2. Edit your application run configurations to add the following environment variables:
@@ -28,3 +29,60 @@
     ]
     }
    ```
+
+## Task 2
+
+### MaxTokes
+
+   maxTokens = 10
+   ```
+   {
+    "input": "Who is the first astronaut?",
+    "output": "The first astronaut is Yuri Gagarin. He"
+   }
+   ```
+
+   maxTokens = 50
+   ```
+   {
+    "input": "Who is the first astronaut?",
+    "output": "The first astronaut is Yuri Gagarin. He became the first human to travel into space on April 12, 1961, aboard the Vostok 1 spacecraft."
+   }
+   ```
+
+   ---
+### Temperature
+
+   temperature = 0.1 (low creativity) 
+   ```
+   {
+    "input": "come up with the first paragraph of a story about a girl named Lisa who went for a walk and got lost in the forest",
+    "output": "Lisa had always been an adventurous soul, constantly seeking new experiences and uncharted territories. On a crisp autumn morning, with the sun casting its golden rays through the dense foliage, she decided to embark on a solitary walk in the enchanting forest that bordered her small town. With a backpack slung over her shoulder and a heart brimming with excitement, little did Lisa know that this seemingly innocent stroll would soon lead her into a labyrinth of towering trees, where every step she took would only deepen her ent"
+   }
+   ```
+
+   temperature = 1 (high creativity)
+   ```
+   {
+   "input": "come up with the first paragraph of a story about a girl named Lisa who went for a walk and got lost in the forest",
+   "output": "The air was thick with anticipation as Lisa began her leisurely stroll through the lush woodland that cradled her small village. With each step, the weight of her mundane worries effortlessly dissipated, replaced by the alluring enchantment of nature's symphony. The sun's gentle rays streamed through the emerald canopy overhead, casting dancing shadows on the forest floor. Lisa reveled in the harmony of chirping birds, rustling leaves, and distant whispers of a playful breeze. Unbeknownst"
+   }
+   ```
+
+   ---
+### Chat with history
+   
+   * first response:
+   ```
+   "input": "What is an aspirin?",
+    "output": "Aspirin is a common over-the-counter medication that belongs to the class of drugs known as nonsteroidal anti-inflammatory drugs (NSAIDs). Its active ingredient is acetylsalicylic acid, which helps to reduce pain, fever,"
+   ```
+
+   * second response:
+   ```
+   {
+    "input": "Where can I buy it?",
+    "output": "Aspirin is widely available and can be purchased at various places, including pharmacies, drugstores, supermarkets, and online retailers. It is an over-the-counter medication, so you do not need a prescription to buy it. However, it is always"
+   }
+   ```
+   
