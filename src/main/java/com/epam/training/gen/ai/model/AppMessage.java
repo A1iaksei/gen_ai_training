@@ -1,9 +1,9 @@
-package com.epam.training.gen.ai.dto;
+package com.epam.training.gen.ai.model;
 
 import lombok.Data;
 
 @Data
-public class AppMessageDTO {
+public class AppMessage {
     String input;
     String output;
     String model;
