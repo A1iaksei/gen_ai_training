@@ -2,10 +2,12 @@ package com.epam.training.gen.ai.controller;
 
 import com.epam.training.gen.ai.dto.AppMessageDTO;
 import com.epam.training.gen.ai.exception.GenAiBadRequestException;
+import com.epam.training.gen.ai.model.AppMessage;
 import com.epam.training.gen.ai.service.KernelHistoryService;
 import com.epam.training.gen.ai.service.SimplePromptService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ChatController {
   private static final String INPUT_PARAMETER_IS_EMPTY_MESSAGE = "input parameter is empty";
 
+  private ModelMapper modelMapper;
   private SimplePromptService simplePromptService;
   private KernelHistoryService kernelHistoryService;
 
@@ -24,15 +27,15 @@ public class ChatController {
    *
    * <p>
    *
-   * @param message new {@link AppMessageDTO} with {@link String} input
+   * @param appMessageDTO new {@link AppMessageDTO} with {@link String} input
    * @return {@link AppMessageDTO} with {@link List<String>} output
    */
   @PostMapping(value = "/semantic-kernel")
-  public AppMessageDTO getSemanticKernelAnswer(@RequestBody AppMessageDTO message) {
-    validateAppMessageDTO(message);
-    String answer = kernelHistoryService.processWithHistory(message.getInput());
-    message.setOutput(answer);
-    return message;
+  public AppMessageDTO getSemanticKernelAnswer(@RequestBody AppMessageDTO appMessageDTO) {
+    var appMessage = this.mapToAppMessage(appMessageDTO);
+    String answer = kernelHistoryService.processWithHistory(appMessage);
+    appMessageDTO.setOutput(answer);
+    return appMessageDTO;
   }
 
   /**
@@ -40,15 +43,22 @@ public class ChatController {
    *
    * <p>
    *
-   * @param message new {@link AppMessageDTO} with {@link String} input
+   * @param appMessageDTO new {@link AppMessageDTO} with {@link String} input
    * @return {@link AppMessageDTO} with {@link List<String>} output
    */
   @PostMapping(value = "/simple")
-  public AppMessageDTO getSimpleAnswer(@RequestBody AppMessageDTO message) {
-    validateAppMessageDTO(message);
-    var answer = simplePromptService.getChatCompletions(message.getInput());
-    message.setOutput(answer);
-    return message;
+  public AppMessageDTO getSimpleAnswer(@RequestBody AppMessageDTO appMessageDTO) {
+    var appMessage = this.mapToAppMessage(appMessageDTO);
+    var answer = simplePromptService.getChatCompletions(appMessage);
+    appMessageDTO.setOutput(answer);
+    return appMessageDTO;
+  }
+
+  private AppMessage mapToAppMessage(AppMessageDTO appMessageDTO){
+    validateAppMessageDTO(appMessageDTO);
+    AppMessage appMessage = new AppMessage();
+    modelMapper.map(appMessageDTO, appMessage);
+    return appMessage;
   }
 
   private void validateAppMessageDTO(AppMessageDTO message) {

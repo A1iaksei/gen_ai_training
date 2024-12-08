@@ -1,5 +1,6 @@
 package com.epam.training.gen.ai.service;
 
+import com.epam.training.gen.ai.model.AppMessage;
 import com.microsoft.semantickernel.Kernel;
 import com.microsoft.semantickernel.orchestration.InvocationContext;
 import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
@@ -8,15 +9,20 @@ import com.microsoft.semantickernel.services.chatcompletion.ChatMessageContent;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Slf4j
 @Service
-public class SimplePromptService {
-  private final ChatCompletionService chatCompletionService;
-  private final Kernel kernel;
+public abstract class SimplePromptService {
   private final InvocationContext invocationContext;
+
+  @Lookup
+  protected abstract ChatCompletionService getChatCompletionService(String deploymentName);
+
+  @Lookup
+  protected abstract Kernel getKernel(ChatCompletionService chatCompletionService);
 
   /**
    * Interacts with the Azure OpenAI API to generate chat completions based on user provided
@@ -25,13 +31,14 @@ public class SimplePromptService {
    * @param message with user prompt
    * @return a {@link String} answer
    */
-  public String getChatCompletions(String message) {
+  public String getChatCompletions(AppMessage message) {
     var chatHistory = new ChatHistory();
-    chatHistory.addUserMessage(message);
+    chatHistory.addUserMessage(message.getInput());
 
+    ChatCompletionService chatCompletionService = getChatCompletionService(message.getModel());
     var response =
         chatCompletionService
-            .getChatMessageContentsAsync(chatHistory, kernel, invocationContext)
+            .getChatMessageContentsAsync(chatHistory, getKernel(chatCompletionService), invocationContext)
             .block();
 
     var answer =

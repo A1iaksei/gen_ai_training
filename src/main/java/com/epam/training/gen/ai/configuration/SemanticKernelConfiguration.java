@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
 @RequiredArgsConstructor
@@ -33,9 +34,10 @@ public class SemanticKernelConfiguration {
    * @return an instance of {@link ChatCompletionService}
    */
   @Bean
-  public ChatCompletionService chatCompletionService() {
+  @Scope(value = "prototype")
+  public ChatCompletionService chatCompletionService(String deploymentName) {
     return OpenAIChatCompletion.builder()
-        .withModelId(clientOpenAiProperties.clientOpenAiDeploymentName())
+        .withModelId(deploymentName)
         .withOpenAIAsyncClient(openAIAsyncClient)
         .build();
   }
@@ -54,14 +56,13 @@ public class SemanticKernelConfiguration {
    * Creates a {@link Kernel} bean to manage AI services and plugins.
    *
    * @param chatCompletionService the {@link ChatCompletionService} for handling completions
-   * @param kernelPlugin the {@link KernelPlugin} to be used in the kernel
    * @return an instance of {@link Kernel}
    */
   @Bean
-  public Kernel kernel(ChatCompletionService chatCompletionService, KernelPlugin kernelPlugin) {
+  @Scope(value = "prototype")
+  public Kernel kernel(ChatCompletionService chatCompletionService) {
     return Kernel.builder()
         .withAIService(ChatCompletionService.class, chatCompletionService)
-        .withPlugin(kernelPlugin())
         .build();
   }
 

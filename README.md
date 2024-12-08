@@ -85,4 +85,39 @@
     "output": "Aspirin is widely available and can be purchased at various places, including pharmacies, drugstores, supermarkets, and online retailers. It is an over-the-counter medication, so you do not need a prescription to buy it. However, it is always"
    }
    ```
-   
+
+## Task 3
+
+### Use Mixtral-8x7B-Instruct-v0.1
+* request:
+   ```
+   {
+   "input" : "Glory to the Emperor of Humanity?",
+   "model" : "Mixtral-8x7B-Instruct-v0.1"      
+   }
+   ```
+* response:
+  ```
+  {
+    "input": "Glory to the Emperor of Humanity?",
+    "output": " The phrase \"Glory to the Emperor of Humanity\" is a quote from the Warhammer 40,000 universe, a popular science fiction franchise. In this fictional universe, the Emperor of Mankind is a powerful and influential figure who rules over humanity with the aid of his Space Marine armies. The phrase is often used as a rallying cry or expression of loyalty by the franchise's many fans.\n\nHowever, it's important to note that",
+    "model": "Mixtral-8x7B-Instruct-v0.1"
+   }
+  ```
+
+### Use Gpt-4o
+* request:
+   ```
+   {
+   "input" : "Glory to the Emperor of Humanity?",
+   "model" : "gpt-4o"      
+   }
+   ```
+* response:
+  ```
+   {
+   "input": "Glory to the Emperor of Humanity?",
+   "output": "\"Glory to the Emperor of Humanity\" is indeed a phrase from the Warhammer 40,000 universe. In this setting, the Emperor of Mankind is a central figure who is revered as a god-like being by the Imperium of Man. The Imperium is a vast, authoritarian regime that spans the galaxy, and its citizens and soldiers often express their devotion and loyalty with such phrases. The Emperor is seen as humanity's greatest protector against numerous threats in this grimdark future, including alien",
+   "model": "gpt-4o"
+   }
+  ```
