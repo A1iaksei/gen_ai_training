@@ -35,6 +35,7 @@ public class ChatController {
     var appMessage = this.mapToAppMessage(appMessageDTO);
     String answer = kernelHistoryService.processWithHistory(appMessage);
     appMessageDTO.setOutput(answer);
+    appMessageDTO.setModel(appMessage.getModel());
     return appMessageDTO;
   }
 
@@ -51,6 +52,7 @@ public class ChatController {
     var appMessage = this.mapToAppMessage(appMessageDTO);
     var answer = simplePromptService.getChatCompletions(appMessage);
     appMessageDTO.setOutput(answer);
+    appMessageDTO.setModel(appMessage.getModel());
     return appMessageDTO;
   }
 
