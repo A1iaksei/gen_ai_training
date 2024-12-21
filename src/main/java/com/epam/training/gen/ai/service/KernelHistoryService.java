@@ -1,12 +1,15 @@
 package com.epam.training.gen.ai.service;
 
+import com.epam.training.gen.ai.model.AppMessage;
 import com.microsoft.semantickernel.Kernel;
 import com.microsoft.semantickernel.orchestration.InvocationContext;
 import com.microsoft.semantickernel.semanticfunctions.KernelFunction;
 import com.microsoft.semantickernel.semanticfunctions.KernelFunctionArguments;
+import com.microsoft.semantickernel.services.chatcompletion.ChatCompletionService;
 import com.microsoft.semantickernel.services.chatcompletion.ChatHistory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,10 +22,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class KernelHistoryService {
-  private final Kernel kernel;
+public abstract class KernelHistoryService {
   private final ChatHistory chatHistory;
   private final InvocationContext invocationContext;
+
+  @Lookup
+  protected abstract ChatCompletionService getChatCompletionService(String deploymentName);
+
+  @Lookup
+  protected abstract Kernel getKernel(ChatCompletionService chatCompletionService);
 
   /**
    * Creates the kernel function arguments with the user prompt and chat history.
@@ -58,19 +66,19 @@ public class KernelHistoryService {
    * process user prompts while preserving chat history.
    * The conversation history is updated after each interaction.
    *
-   * @param prompt the user's input
+   * @param appMessage the user's input
    * @return a {@link String} LLMs output
    */
-  public String processWithHistory(String prompt) {
+  public String processWithHistory(AppMessage appMessage) {
 
     var response =
-        kernel
+        getKernel(getChatCompletionService(appMessage.getModel()))
             .invokeAsync(getChat())
             .withInvocationContext(invocationContext)
-            .withArguments(getKernelFunctionArguments(prompt, chatHistory))
+            .withArguments(getKernelFunctionArguments(appMessage.getInput(), chatHistory))
             .block();
 
-    chatHistory.addUserMessage(prompt);
+    chatHistory.addUserMessage(appMessage.getInput());
     chatHistory.addAssistantMessage(response.getResult());
     var result = response.getResult();
     log.info("AI answer:{}", result);
