@@ -4,6 +4,7 @@ import com.epam.training.gen.ai.dto.AppMessageDTO;
 import com.epam.training.gen.ai.exception.GenAiBadRequestException;
 import com.epam.training.gen.ai.model.AppMessage;
 import com.epam.training.gen.ai.service.KernelHistoryService;
+import com.epam.training.gen.ai.service.LightsPluginService;
 import com.epam.training.gen.ai.service.SimplePromptService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,7 @@ public class ChatController {
   private ModelMapper modelMapper;
   private SimplePromptService simplePromptService;
   private KernelHistoryService kernelHistoryService;
+  private LightsPluginService lightsPluginService;
 
   /**
    * Creates a new {@link AppMessageDTO} for chat conversation using Semantic Kernel
@@ -51,6 +53,23 @@ public class ChatController {
   public AppMessageDTO getSimpleAnswer(@RequestBody AppMessageDTO appMessageDTO) {
     var appMessage = this.mapToAppMessage(appMessageDTO);
     var answer = simplePromptService.getChatCompletions(appMessage);
+    appMessageDTO.setOutput(answer);
+    appMessageDTO.setModel(appMessage.getModel());
+    return appMessageDTO;
+  }
+
+  /**
+   * Creates a new {@link AppMessageDTO} for managing Lights devices of the smart home
+   *
+   * <p>
+   *
+   * @param appMessageDTO new {@link AppMessageDTO} with {@link String} input
+   * @return {@link AppMessageDTO} with {@link List<String>} output
+   */
+  @PostMapping(value = "/lights-plugin")
+  public AppMessageDTO getLightsPluginAnswer(@RequestBody AppMessageDTO appMessageDTO) {
+    var appMessage = this.mapToAppMessage(appMessageDTO);
+    var answer = lightsPluginService.getChatCompletions(appMessage);
     appMessageDTO.setOutput(answer);
     appMessageDTO.setModel(appMessage.getModel());
     return appMessageDTO;
