@@ -1,6 +1,7 @@
 package com.epam.training.gen.ai.configuration;
 
 import com.azure.ai.openai.OpenAIAsyncClient;
+import com.epam.training.gen.ai.plugin.LightsPlugin;
 import com.epam.training.gen.ai.plugin.SimplePlugin;
 import com.microsoft.semantickernel.Kernel;
 import com.microsoft.semantickernel.aiservices.openai.chatcompletion.OpenAIChatCompletion;
@@ -58,12 +59,35 @@ public class SemanticKernelConfiguration {
    * @param chatCompletionService the {@link ChatCompletionService} for handling completions
    * @return an instance of {@link Kernel}
    */
-  @Bean
+  @Bean(value = "simpleKernel")
   @Scope(value = "prototype")
   public Kernel kernel(ChatCompletionService chatCompletionService) {
     return Kernel.builder()
         .withAIService(ChatCompletionService.class, chatCompletionService)
         .build();
+  }
+  /**
+   * Creates a {@link Kernel} bean with lightsPlugin
+   *
+   * @param chatCompletionService the {@link ChatCompletionService} for handling completions
+   * @return an instance of {@link Kernel}
+   */
+  @Bean(value = "lightsPluginKernel")
+  @Scope(value = "prototype")
+  public Kernel getKernelWithLightPlugin(ChatCompletionService chatCompletionService) {
+    return Kernel.builder()
+            .withAIService(ChatCompletionService.class, chatCompletionService)
+            .withPlugin(this.getLightsPlugin())
+            .build();
+  }
+
+  /**
+   * Creates a {@link KernelPlugin} bean with functionality to manage light
+   *
+   * @return an instance of {@link KernelPlugin}
+   */
+  public KernelPlugin getLightsPlugin(){
+    return KernelPluginFactory.createFromObject(new LightsPlugin(), "LightsPlugin");
   }
 
   /**

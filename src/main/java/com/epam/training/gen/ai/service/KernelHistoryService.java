@@ -29,7 +29,7 @@ public abstract class KernelHistoryService {
   @Lookup
   protected abstract ChatCompletionService getChatCompletionService(String deploymentName);
 
-  @Lookup
+  @Lookup(value = "simpleKernel")
   protected abstract Kernel getKernel(ChatCompletionService chatCompletionService);
 
   /**
