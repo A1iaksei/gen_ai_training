@@ -147,4 +147,11 @@
     "output": "Here are the current states of all the lights:\n\n1. **Table Lamp**: Off\n2. **Porch light**: On\n3. **Chandelier**: On\n\nIf you would like to make any changes, please let me know!",
     "model": "gpt-4o"
     }
-    ````   
+    ````  
+
+## Task 5
+### Requirements
+For this task you need to install Qdrant in Docker and start it:
+  ```
+    docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage qdrant/qdrant
+  ``` 
