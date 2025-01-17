@@ -121,3 +121,10 @@
    "model": "gpt-4o"
    }
   ```
+
+## Task 5
+### Requirements
+For this task you need to install Qdrant in Docker and start it:
+  ```
+    docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage qdrant/qdrant
+  ```
