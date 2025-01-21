@@ -154,4 +154,39 @@
 For this task you need to install Qdrant in Docker and start it:
   ```
     docker run -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage qdrant/qdrant
-  ``` 
+  ```
+
+## Task 6
+### Add text
+
+    POST: http://localhost:8080/rag/documents
+
+  ```
+    The ceasefire has taken force and 3 hostages are back in Israel. Here’s what to know (19.01.2025)
+    A ceasefire between Israel and Hamas is underway in Gaza, bringing a reprieve for Palestinians in the enclave and allowing the first of 33 Israeli hostages to be freed.
+    Here are the latest developments:
+    • Ceasefire begins: The ceasefire in Gaza has been in effect since Sunday morning. It was delayed by nearly three hours after Israel said Hamas had failed to provide the names of the first three hostages set to be freed. Hamas blamed a “technical” hold up. At least 19 Palestinians were killed on Sunday before the truce began, according to Gaza’s Civil Defense.
+    • Hostages released: Hamas eventually said that Romi Gonen, 24; Doron Steinbrecher, 31; and dual UK-Israeli citizen Emily Damari, 28, were to be released. They were handed to staff with the International Committee of the Red Cross (ICRC) in Gaza and swiftly transferred to Re’im in southern Israel.
+    • Hospital treatment: The three women – captive for 471 days – were said by Red Cross staff to be in good health, but are being treated at the Sheba Medical Center in the outskirts of Tel Aviv. Staff from the hospital and Israel’s health ministry will provide an update shortly.
+    • Palestinian prisoners: In exchange for the three freed hostages, Israel is set to release 90 Palestinian prisoners. Large crowds have gathered outside Ofer Prison in the occupied West Bank, awaiting their release.
+    • Gazans return home: The truce – just the second in 15 months of fighting – has allowed many Palestinians displaced in Gaza to return home. CNN drone footage has shown people in Gaza walking along streets lined with rubble of destroyed buildings. Aerial shots show near-total desolation in the north of the strip.
+    • Humanitarian aid enters: As the ceasefire came into effect, the United Nations agency for Palestinian refugees said it had 4,000 trucks of aid ready to enter Gaza. Trucks from the World Food Programme, another UN body, entered the enclave shortly after the truce began.
+    • What next?: The first phase of the deal will see the staggered release of 30 more Israeli hostages from Gaza. In return, Israel is expected to free almost 2,000 Palestinian prisoners. With the second and third phases of the truce uncertain, there are no guarantees that Israel will not resume its bombardment of Gaza.
+  ```
+
+### Get answer
+    POST: http://localhost:8080/rag/prompt
+
+  ```
+  What are the names of hostages?
+  ```
+
+  ```
+  [
+    {
+        "id": "ffbe9748-e179-4ca6-ac5a-b61947d70875",
+        "score": 0.75798315,
+        "payload": "• Hostages released: Hamas eventually said that Romi Gonen, 24; Doron Steinbrecher, 31; and dual UK-Israeli citizen Emily Damari, 28, were to be released. They were handed to staff with the International Committee of the Red Cross (ICRC) in Gaza and swiftly transferred to Re’im in southern Israel."
+    }
+  ]
+  ```

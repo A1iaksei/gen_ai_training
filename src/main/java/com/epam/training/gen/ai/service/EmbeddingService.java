@@ -41,7 +41,7 @@ public class EmbeddingService {
                         collectionName,
                         Collections.VectorParams.newBuilder()
                                 .setDistance(Collections.Distance.Cosine)
-                                .setSize(1536)
+                                .setSize(384)
                                 .build())
                 .get();
         log.info("Collection was created: [{}]", result.getResult());
